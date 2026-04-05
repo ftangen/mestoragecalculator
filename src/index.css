@@ -1,0 +1,93 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap');
+
+@layer base {
+  html {
+    font-family: 'Inter', system-ui, sans-serif;
+  }
+
+  body {
+    @apply bg-slate-950 text-slate-100;
+    background-image:
+      radial-gradient(ellipse at 20% 20%, rgba(0, 184, 240, 0.04) 0%, transparent 50%),
+      radial-gradient(ellipse at 80% 80%, rgba(16, 185, 129, 0.04) 0%, transparent 50%);
+    background-attachment: fixed;
+  }
+
+  * {
+    @apply border-slate-700;
+  }
+}
+
+@layer components {
+  .card {
+    @apply bg-slate-900 border border-slate-800 rounded-xl;
+  }
+
+  .section-label {
+    @apply text-xs font-semibold text-slate-400 uppercase tracking-widest mb-3;
+  }
+
+  .btn-tier {
+    @apply px-5 py-2 rounded-full border text-sm font-medium transition-all duration-200 cursor-pointer;
+  }
+
+  .btn-tier-active-std {
+    @apply border-emerald-500 bg-emerald-500/10 text-emerald-400 shadow-glow-emerald;
+  }
+
+  .btn-tier-active-mega {
+    @apply border-amber-500 bg-amber-500/10 text-amber-400 shadow-glow-amber;
+  }
+
+  .btn-tier-inactive {
+    @apply border-slate-700 bg-transparent text-slate-400 hover:border-slate-500 hover:text-slate-300;
+  }
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #020617;
+}
+::-webkit-scrollbar-thumb {
+  background: #334155;
+  border-radius: 3px;
+}
+
+/* Range input styling */
+input[type='range'] {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 4px;
+  background: #1e293b;
+  border-radius: 2px;
+  outline: none;
+}
+input[type='range']::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #00b8f0;
+  cursor: pointer;
+  box-shadow: 0 0 8px rgba(0, 184, 240, 0.5);
+  border: 2px solid #0d1117;
+  transition: box-shadow 0.2s;
+}
+input[type='range']::-webkit-slider-thumb:hover {
+  box-shadow: 0 0 14px rgba(0, 184, 240, 0.8);
+}
+input[type='range']::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #00b8f0;
+  cursor: pointer;
+  border: 2px solid #0d1117;
+}
