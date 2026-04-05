@@ -2,6 +2,7 @@
   "name": "mestoragecalculator",
   "version": "1.0.0",
   "description": "AE2 + MEGA Cells storage calculator for ATM10",
+  "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
@@ -15,7 +16,7 @@
     "@vitejs/plugin-react": "^4.3.0",
     "autoprefixer": "^10.4.27",
     "postcss": "^8.5.8",
-    "tailwindcss": "^4.2.2",
+    "tailwindcss": "^3.4.19",
     "vite": "^5.4.0"
   }
 }
