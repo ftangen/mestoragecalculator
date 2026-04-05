@@ -1,5 +1,10 @@
 import { useState } from "react";
-import { STD_CELLS, MEGA_CELLS, STD_TOTALS, MEGA_TOTALS, STD_TREE, MEGA_TREE, STD_HOUSING, MEGA_HOUSING } from "./data/recipes.js";
+import {
+  STD_CELLS, MEGA_CELLS,
+  STD_TOTALS, MEGA_TOTALS, FLUID_TOTALS,
+  STD_TREE, MEGA_TREE, FLUID_TREE,
+  STD_HOUSING, MEGA_HOUSING,
+} from "./data/recipes.js";
 import TierSelector from "./components/TierSelector.jsx";
 import CellSelector from "./components/CellSelector.jsx";
 import QuantitySlider from "./components/QuantitySlider.jsx";
@@ -8,20 +13,39 @@ import CraftingTree from "./components/CraftingTree.jsx";
 import HousingNote from "./components/HousingNote.jsx";
 
 export default function App() {
-  const [tier, setTier] = useState("std");
-  const [cell, setCell] = useState("1k");
-  const [qty,  setQty]  = useState(1);
+  const [tier,    setTier]    = useState("std");
+  const [subtype, setSubtype] = useState("item"); // "item" | "fluid", only for std
+  const [cell,    setCell]    = useState("1k");
+  const [qty,     setQty]     = useState(1);
 
-  const cells       = tier === "std" ? STD_CELLS : MEGA_CELLS;
-  const totals      = tier === "std" ? STD_TOTALS[cell] : MEGA_TOTALS[cell];
-  const tree        = tier === "std" ? STD_TREE[cell]   : MEGA_TREE[cell];
-  const housing     = tier === "mega" ? MEGA_HOUSING : STD_HOUSING;
+  const cells = tier === "std" ? STD_CELLS : MEGA_CELLS;
+
+  const totals = tier === "mega"
+    ? MEGA_TOTALS[cell]
+    : subtype === "fluid"
+      ? FLUID_TOTALS[cell]
+      : STD_TOTALS[cell];
+
+  const tree = tier === "mega"
+    ? MEGA_TREE[cell]
+    : subtype === "fluid"
+      ? FLUID_TREE[cell]
+      : STD_TREE[cell];
+
+  const housing      = tier === "mega" ? MEGA_HOUSING : STD_HOUSING;
   const housingLabel = tier === "mega" ? "MEGA Item Cell Housing" : "ME Item Cell Housing";
+  const showHousing  = !(tier === "std" && subtype === "fluid");
 
   function handleTierChange(t) {
     setTier(t);
+    setSubtype("item");
     setCell(t === "std" ? "1k" : "1M");
     setQty(1);
+  }
+
+  function handleSubtypeChange(s) {
+    setSubtype(s);
+    setCell("1k");
   }
 
   return (
@@ -46,8 +70,13 @@ export default function App() {
         {/* Divider */}
         <div className="h-px bg-gradient-to-r from-ae2-500/30 via-slate-700 to-transparent" />
 
-        {/* Tier selector */}
-        <TierSelector tier={tier} onChange={handleTierChange} />
+        {/* Tier + subtype selector */}
+        <TierSelector
+          tier={tier}
+          subtype={subtype}
+          onTierChange={handleTierChange}
+          onSubtypeChange={handleSubtypeChange}
+        />
 
         {/* Cell size */}
         <CellSelector cells={cells} cell={cell} tier={tier} onSelect={setCell} />
@@ -66,8 +95,10 @@ export default function App() {
         {/* Crafting tree */}
         <CraftingTree tree={tree} />
 
-        {/* Housing note */}
-        <HousingNote housing={housing} housingLabel={housingLabel} qty={qty} />
+        {/* Housing note — not shown for fluid cells (recipe is self-contained) */}
+        {showHousing && (
+          <HousingNote housing={housing} housingLabel={housingLabel} qty={qty} />
+        )}
 
         {/* Footer */}
         <footer className="pt-4 text-center text-xs text-slate-600">

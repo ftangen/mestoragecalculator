@@ -16,6 +16,9 @@ export const MATERIALS = {
   copper:    { label: "Copper Ingot",            twBg: "bg-orange-900/60", twText: "text-orange-200", twBorder: "border-orange-700/60" },
 };
 
+export const STD_CELLS  = ["1k", "4k", "16k", "64k", "256k"];
+export const MEGA_CELLS = ["1M", "4M", "16M", "64M", "256M"];
+
 // ── Housing recipes ──────────────────────────────────────────────────────────
 export const STD_HOUSING  = { qglass: 2, redstone: 3, iron: 2, copper: 1 };
 export const MEGA_HOUSING = { skystone: 3, vqglass: 2, skystoneI: 3 };
@@ -162,6 +165,35 @@ export const MEGA_TREE = {
   ],
 };
 
+// ── Fluid Storage Cell totals (storage component + 2 Quartz Glass + 3 Redstone + 3 Copper) ──
+const FLUID_EXTRA = { qglass: 2, redstone: 3, copper: 3 };
+
+export const FLUID_TOTALS = Object.fromEntries(
+  STD_CELLS.map(size => [size, addMats(STD_TOTALS[size], FLUID_EXTRA)])
+);
+
+// ── Fluid crafting trees (fluid cell wraps the storage component) ─────────────
+// Generated from STD_TREE: indent all rows by +1, prepend fluid cell header,
+// append the 3 fluid-specific direct ingredients.
+const FLUID_NAMES = {
+  "1k": "1k ME Fluid Storage Cell", "4k": "4k ME Fluid Storage Cell",
+  "16k": "16k ME Fluid Storage Cell", "64k": "64k ME Fluid Storage Cell",
+  "256k": "256k ME Fluid Storage Cell",
+};
+
+export const FLUID_TREE = Object.fromEntries(
+  STD_CELLS.map(size => [
+    size,
+    [
+      [0, FLUID_NAMES[size], "×1"],
+      ...STD_TREE[size].map(([indent, label, qty]) => [indent + 1, label, qty]),
+      [1, "Quartz Glass",  "×2"],
+      [1, "Redstone",      "×3"],
+      [1, "Copper Ingot",  "×3"],
+    ],
+  ])
+);
+
 // ── Capacity labels ───────────────────────────────────────────────────────────
 export const CAPACITY = {
   "1k":   "~8k items",   "4k":   "~32k items",  "16k":  "~130k items",
@@ -169,6 +201,3 @@ export const CAPACITY = {
   "1M":   "~8M items",   "4M":   "~32M items",  "16M":  "~130M items",
   "64M":  "~520M items", "256M": "~2B items",
 };
-
-export const STD_CELLS  = ["1k", "4k", "16k", "64k", "256k"];
-export const MEGA_CELLS = ["1M", "4M", "16M", "64M", "256M"];
