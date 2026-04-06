@@ -11,6 +11,7 @@ import QuantitySlider from "./components/QuantitySlider.jsx";
 import MaterialGrid from "./components/MaterialGrid.jsx";
 import CraftingTree from "./components/CraftingTree.jsx";
 import HousingNote from "./components/HousingNote.jsx";
+import ProcessorGuide from "./components/ProcessorGuide.jsx";
 
 export default function App() {
   const [tier,    setTier]    = useState("std");
@@ -99,6 +100,9 @@ export default function App() {
         {showHousing && (
           <HousingNote housing={housing} housingLabel={housingLabel} qty={qty} />
         )}
+
+        {/* Processor guide */}
+        <ProcessorGuide />
 
         {/* Footer */}
         <footer className="pt-4 text-center text-xs text-slate-600">
