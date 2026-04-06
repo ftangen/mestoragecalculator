@@ -28,11 +28,18 @@ function Step({ step, index }) {
   );
 }
 
-function ProcessorCard({ proc }) {
+function ProcessorCard({ proc, count }) {
+  const hasCount = count > 0;
+
   return (
     <div className={`rounded-xl border ${proc.twBorder} ${proc.twBg} overflow-hidden`}>
-      <div className="px-4 py-3 border-b border-slate-800/60">
+      <div className="px-4 py-3 border-b border-slate-800/60 flex items-center justify-between gap-2">
         <h3 className={`font-semibold text-sm ${proc.twAccent}`}>{proc.label}</h3>
+        {hasCount && (
+          <span className={`text-xs font-mono px-2 py-0.5 rounded border ${proc.twBadge}`}>
+            ×{count.toLocaleString()} needed
+          </span>
+        )}
       </div>
 
       <div className="px-4 py-3 space-y-3">
@@ -45,16 +52,21 @@ function ProcessorCard({ proc }) {
 
         {/* Raw materials summary */}
         <div className="pt-2 border-t border-slate-800/60">
-          <p className="text-xs text-slate-600 uppercase tracking-widest mb-1.5">Raw materials per processor</p>
+          <p className="text-xs text-slate-600 uppercase tracking-widest mb-1.5">
+            {hasCount ? `Total raw materials (×${count.toLocaleString()})` : "Raw materials per processor"}
+          </p>
           <div className="flex flex-wrap gap-2">
-            {proc.rawMats.map((mat, i) => (
-              <span
-                key={i}
-                className={`text-xs px-2 py-0.5 rounded border font-mono ${proc.twBadge}`}
-              >
-                {mat}
-              </span>
-            ))}
+            {proc.rawMats.map((mat, i) => {
+              const total = hasCount ? mat.qty * count : mat.qty;
+              return (
+                <span
+                  key={i}
+                  className={`text-xs px-2 py-0.5 rounded border font-mono ${proc.twBadge}`}
+                >
+                  {total.toLocaleString()}× {mat.label}
+                </span>
+              );
+            })}
           </div>
         </div>
       </div>
@@ -62,8 +74,15 @@ function ProcessorCard({ proc }) {
   );
 }
 
-export default function ProcessorGuide() {
+export default function ProcessorGuide({ totals, qty }) {
   const [open, setOpen] = useState(false);
+
+  // Count how many of each processor the current selection needs in total
+  function getCount(key) {
+    return totals && totals[key] ? totals[key] * qty : 0;
+  }
+
+  const totalProcessors = PROCESSOR_RECIPES.reduce((sum, p) => sum + getCount(p.key), 0);
 
   return (
     <div>
@@ -75,15 +94,22 @@ export default function ProcessorGuide() {
           <span className="opacity-60">⚙</span>
           Processor recipes
         </span>
-        <span className={`transition-transform duration-200 text-slate-600 ${open ? "rotate-180" : ""}`}>
-          ▾
+        <span className="flex items-center gap-3">
+          {totalProcessors > 0 && (
+            <span className="text-xs font-mono text-slate-500">
+              {totalProcessors.toLocaleString()} total
+            </span>
+          )}
+          <span className={`transition-transform duration-200 text-slate-600 ${open ? "rotate-180" : ""}`}>
+            ▾
+          </span>
         </span>
       </button>
 
       {open && (
         <div className="mt-3 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
           {PROCESSOR_RECIPES.map(proc => (
-            <ProcessorCard key={proc.key} proc={proc} />
+            <ProcessorCard key={proc.key} proc={proc} count={getCount(proc.key)} />
           ))}
         </div>
       )}

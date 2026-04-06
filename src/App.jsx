@@ -102,7 +102,7 @@ export default function App() {
         )}
 
         {/* Processor guide */}
-        <ProcessorGuide />
+        <ProcessorGuide totals={totals} qty={qty} />
 
         {/* Footer */}
         <footer className="pt-4 text-center text-xs text-slate-600">

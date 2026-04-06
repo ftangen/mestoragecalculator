@@ -26,7 +26,7 @@ export const PROCESSOR_RECIPES = [
         press: null,
       },
     ],
-    rawMats: ["1× Gold Ingot", "1× Redstone", "1× Silicone"],
+    rawMats: [{ label: "Gold Ingot", qty: 1 }, { label: "Redstone", qty: 1 }, { label: "Silicone", qty: 1 }],
   },
   {
     key: "calc",
@@ -52,7 +52,7 @@ export const PROCESSOR_RECIPES = [
         press: null,
       },
     ],
-    rawMats: ["1× Certus Quartz Crystal", "1× Redstone", "1× Silicone"],
+    rawMats: [{ label: "Certus Quartz Crystal", qty: 1 }, { label: "Redstone", qty: 1 }, { label: "Silicone", qty: 1 }],
   },
   {
     key: "accum",
@@ -78,6 +78,6 @@ export const PROCESSOR_RECIPES = [
         press: null,
       },
     ],
-    rawMats: ["1× Sky Steel Ingot", "1× Fluix Dust", "1× Silicone"],
+    rawMats: [{ label: "Sky Steel Ingot", qty: 1 }, { label: "Fluix Dust", qty: 1 }, { label: "Silicone", qty: 1 }],
   },
 ];
